@@ -1,0 +1,49 @@
+name: Node CI
+
+on:
+  push:
+    branches-ignore:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache npm cache files
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+            ${{ runner.OS }}-
+
+      - name: npm install
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.TECH_USER_AUTH_TOKEN }}" >> ~/.npmrc
+          npm ci
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+
+      - name: lint
+        run: |
+          npm run lint
+
+      - name: build
+        run: |
+          npm run build
+
+      - name: test
+        run: |
+          npm run test

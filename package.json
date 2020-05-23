@@ -1,0 +1,43 @@
+{
+  "name": "@freckstergit/init-project",
+  "version": "1.0.0",
+  "description": "",
+  "bin": {
+    "init-project": "lib/init-project.ts"
+  },
+  "main": "lib/init-project.js",
+  "scripts": {
+    "start": "nodemon --watch \"src/**/*.ts\" --exec ts-node src/init-project.ts",
+    "build": "tsc -p .",
+    "release": "standard-version"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/freckstergit/template-feature-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "camelcase": "^6.0.0",
+    "clear": "^0.1.0",
+    "commander": "^5.1.0",
+    "extract-zip": "^2.0.0",
+    "glob": "^7.1.6",
+    "got": "^11.1.4",
+    "inquirer": "^7.1.0",
+    "ncp": "^2.0.0",
+    "ora": "^4.0.4"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^6.5.0",
+    "@types/node": "^14.0.5",
+    "nodemon": "^2.0.4",
+    "standard-version": "^8.0.0",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.9.3"
+  }
+}
