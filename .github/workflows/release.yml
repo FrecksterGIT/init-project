@@ -54,6 +54,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           npm ci
