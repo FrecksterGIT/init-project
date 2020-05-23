@@ -1,6 +1,6 @@
 {
   "name": "@freckstergit/init-project",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "bin": {
     "init-project": "lib/init-project.js"
