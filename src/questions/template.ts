@@ -4,18 +4,40 @@ const prompt = require('inquirer').prompt;
 
 import {Settings} from '../interfaces/interfaces';
 
-const templateQuestion = () => ({
-  type: 'rawlist',
-  name: 'template',
-  message: 'The template for the new project:',
-  choices: [{
-    name: 'feature-app',
-    value: 'FrecksterGIT/template-feature-app',
-  }, {
-    name: 'service',
-    value: 'FrecksterGIT/template-service',
-  }],
-});
+const templateQuestion = () => (
+  {
+    type: 'rawlist',
+    name: 'template',
+    message: 'The template for the new project:',
+    choices: [
+      {
+        name: 'feature-app',
+        value: 'FrecksterGIT/template-feature-app',
+      },
+      {
+        name: 'service',
+        value: 'FrecksterGIT/template-service',
+      },
+    ],
+  });
+
+const namespaceQuestion = () => (
+  {
+    type: 'rawlist',
+    name: 'scope',
+    message: 'Scope for the project:',
+    choices: [
+      {
+        name: 'das-buro-am-draht',
+        value: 'das-buro-am-draht',
+      },
+      {
+        name: 'volkswagen-onehub',
+        value: 'volkswagen-onehub',
+      },
+    ],
+  });
+
 
 const projectQuestion = (projectName: string) => ({
   type: 'input',
@@ -30,7 +52,11 @@ const projectQuestion = (projectName: string) => ({
 });
 
 export const template = async (projectName: string): Promise<Settings> => {
-  return await prompt([templateQuestion(), projectQuestion(projectName)]).then((answers: Settings) => {
+  return await prompt([
+    templateQuestion(),
+    namespaceQuestion(),
+    projectQuestion(projectName),
+  ]).then((answers: Settings) => {
     return answers;
   });
 };

@@ -11,6 +11,7 @@ import {download} from './tasks/download';
 import {unpack} from './tasks/unpack';
 import {gitInit} from './tasks/git-init';
 import {cleanup} from './tasks/cleanup';
+import {npmInstall} from './tasks/npm-install';
 
 clear();
 program
@@ -27,7 +28,8 @@ template(program.args[0] ?? '').then(async (settings: Settings) => {
   const asset = await download(settings.template);
   if (asset) {
     await unpack(asset, settings.project);
-    await replacePlaceHolders(settings.template, settings.project);
+    await replacePlaceHolders(settings);
+    await npmInstall(settings.project);
     await gitInit(settings.project);
     await cleanup(asset);
   }

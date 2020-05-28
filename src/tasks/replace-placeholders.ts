@@ -1,4 +1,5 @@
 import ora from 'ora';
+import {Settings} from '../interfaces/interfaces';
 
 const fs = require('fs');
 const path = require('path');
@@ -12,6 +13,7 @@ interface Terms {
 interface RenameOpts {
   target: string;
   terms: Terms;
+  scope: string;
 }
 
 const findFiles = async (dir: string): Promise<string[]> => {
@@ -31,13 +33,22 @@ const replace = (content: string, terms: Terms) => {
   return content;
 };
 
-const handleFile = async (filePath: string, terms: Terms): Promise<boolean> => {
+const replaceScope = (content: string, scope: string): string => {
+  return content
+    .replace(/"name": "@freckstergit\//, `"name": "@${scope}/`)
+    .replace(/github.com\/FrecksterGIT\//i, `github.com/${scope}/`);
+};
+
+const handleFile = async (filePath: string, terms: Terms, scope: string): Promise<boolean> => {
   try {
     if (!fs.lstatSync(filePath).isFile()) {
       return true;
     }
 
     let content = fs.readFileSync(filePath, 'utf8');
+    if (path.basename(filePath) === 'package.json') {
+      content = replaceScope(content, scope);
+    }
     fs.writeFileSync(filePath, replace(content, terms), 'utf8');
 
     const filename = path.basename(filePath);
@@ -54,13 +65,13 @@ const handleFile = async (filePath: string, terms: Terms): Promise<boolean> => {
 const replaceFiles = async (opts: RenameOpts): Promise<boolean> => {
   const files = await findFiles(opts.target);
   const fileResults = await Promise.all(
-    files.map(filePath => handleFile(filePath, opts.terms)),
+    files.map(filePath => handleFile(filePath, opts.terms, opts.scope)),
   );
 
   return !fileResults.some(result => !result);
 };
 
-export const replacePlaceHolders = async (template: string, project: string): Promise<boolean> => {
+export const replacePlaceHolders = async ({template, project, scope}: Settings): Promise<boolean> => {
   const projectName = camelcase(project);
   const ProjectName = camelcase(project, {pascalCase: true});
 
@@ -78,6 +89,7 @@ export const replacePlaceHolders = async (template: string, project: string): Pr
       [placeHolder]: projectName,
       [PlaceHolder]: ProjectName,
     },
+    scope,
   });
   spinner.stop();
 
