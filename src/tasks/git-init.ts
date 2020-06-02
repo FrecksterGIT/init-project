@@ -1,13 +1,5 @@
-import {exec} from 'child_process';
 import {ProjectSettings} from '../init-project';
-
-const asyncExec = async (command: string): Promise<void> => {
-  await new Promise((resolve) => {
-    exec(command, () => {
-      resolve();
-    });
-  });
-};
+import {asyncExec} from '../utils/async-exec';
 
 export const gitInit = async ({project}: ProjectSettings): Promise<void> => {
   const oldPath = process.cwd();

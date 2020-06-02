@@ -1,15 +1,7 @@
-import {exec} from 'child_process';
 import ora from 'ora';
 
 import {ProjectSettings} from '../init-project';
-
-const asyncExec = async (command: string): Promise<void> => {
-  await new Promise((resolve) => {
-    exec(command, () => {
-      resolve();
-    });
-  });
-};
+import {asyncExec} from '../utils/async-exec';
 
 export const npmInstall = async ({project}: ProjectSettings): Promise<void> => {
   const spinner = ora().start('installing npm dependencies');

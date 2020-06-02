@@ -37,4 +37,7 @@ template(program.args[0] ?? '').then(async (settings: ProjectSettings) => {
     await gitInit(settings);
     await cleanup(asset);
   }
+  else {
+    console.log('download of template failed.');
+  }
 });

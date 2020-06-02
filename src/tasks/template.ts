@@ -12,11 +12,11 @@ const templateQuestion = () => (
     choices: [
       {
         name: 'feature-app',
-        value: 'FrecksterGIT/template-feature-app',
+        value: 'das-buro-am-draht/template-feature-app',
       },
       {
         name: 'service',
-        value: 'FrecksterGIT/template-service',
+        value: 'das-buro-am-draht/template-service',
       },
     ],
   });
