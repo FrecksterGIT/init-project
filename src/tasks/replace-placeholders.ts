@@ -1,5 +1,5 @@
 import ora from 'ora';
-import {Settings} from '../interfaces/interfaces';
+import {ProjectSettings} from '../init-project';
 
 const fs = require('fs');
 const path = require('path');
@@ -33,10 +33,11 @@ const replace = (content: string, terms: Terms) => {
   return content;
 };
 
-const replaceScope = (content: string, scope: string): string => {
+const replaceScopeAndVersion = (content: string, scope: string): string => {
   return content
-    .replace(/"name": "@freckstergit\//, `"name": "@${scope}/`)
-    .replace(/github.com\/FrecksterGIT\//i, `github.com/${scope}/`);
+    .replace(/"name": "@das-buro-am-draht\//, `"name": "@${scope}/`)
+    .replace(/github.com\/das-buro-am-draht\//i, `github.com/${scope}/`)
+    .replace(/"version": "\d.\d.\d"/, '"version": "0.0.1"');
 };
 
 const handleFile = async (filePath: string, terms: Terms, scope: string): Promise<boolean> => {
@@ -47,7 +48,7 @@ const handleFile = async (filePath: string, terms: Terms, scope: string): Promis
 
     let content = fs.readFileSync(filePath, 'utf8');
     if (path.basename(filePath) === 'package.json') {
-      content = replaceScope(content, scope);
+      content = replaceScopeAndVersion(content, scope);
     }
     fs.writeFileSync(filePath, replace(content, terms), 'utf8');
 
@@ -71,7 +72,7 @@ const replaceFiles = async (opts: RenameOpts): Promise<boolean> => {
   return !fileResults.some(result => !result);
 };
 
-export const replacePlaceHolders = async ({template, project, scope}: Settings): Promise<boolean> => {
+export const replacePlaceHolders = async ({template, project, scope}: ProjectSettings): Promise<boolean> => {
   const projectName = camelcase(project);
   const ProjectName = camelcase(project, {pascalCase: true});
 

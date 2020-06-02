@@ -1,8 +1,8 @@
+import {ProjectSettings} from '../init-project';
+
 const fs = require('fs');
 const path = require('path');
 const prompt = require('inquirer').prompt;
-
-import {Settings} from '../interfaces/interfaces';
 
 const templateQuestion = () => (
   {
@@ -51,12 +51,12 @@ const projectQuestion = (projectName: string) => ({
   },
 });
 
-export const template = async (projectName: string): Promise<Settings> => {
+export const template = async (projectName: string): Promise<ProjectSettings> => {
   return await prompt([
     templateQuestion(),
     namespaceQuestion(),
     projectQuestion(projectName),
-  ]).then((answers: Settings) => {
+  ]).then((answers: ProjectSettings) => {
     return answers;
   });
 };

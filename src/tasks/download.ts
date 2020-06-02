@@ -1,4 +1,5 @@
 import ora from 'ora';
+import {ProjectSettings} from '../init-project';
 
 const stream = require('stream');
 const {promisify} = require('util');
@@ -7,7 +8,7 @@ const got = require('got');
 
 const pipeline = promisify(stream.pipeline);
 
-export const download = async (template: string): Promise<string> => {
+export const download = async ({template}: ProjectSettings): Promise<string> => {
   const spinner = ora().start('Fetching template info');
 
   try {
@@ -18,7 +19,7 @@ export const download = async (template: string): Promise<string> => {
 
       await pipeline(
         got.stream(response.zipball_url),
-        fs.createWriteStream(asset)
+        fs.createWriteStream(asset),
       );
       spinner.stop();
       return asset;

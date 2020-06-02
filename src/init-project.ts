@@ -1,17 +1,21 @@
 #!/usr/bin/env node
 
 import {replacePlaceHolders} from './tasks/replace-placeholders';
-
-const clear = require('clear');
-const program = require('commander');
-
-import {Settings} from './interfaces/interfaces';
-import {template} from './questions/template';
+import {template} from './tasks/template';
 import {download} from './tasks/download';
 import {unpack} from './tasks/unpack';
 import {gitInit} from './tasks/git-init';
 import {cleanup} from './tasks/cleanup';
 import {npmInstall} from './tasks/npm-install';
+
+const clear = require('clear');
+const program = require('commander');
+
+export interface ProjectSettings {
+  template: string;
+  scope: string;
+  project: string;
+}
 
 clear();
 program
@@ -24,13 +28,13 @@ if (!process.argv.slice(2).length) {
   program.outputHelp();
 }
 
-template(program.args[0] ?? '').then(async (settings: Settings) => {
-  const asset = await download(settings.template);
+template(program.args[0] ?? '').then(async (settings: ProjectSettings) => {
+  const asset = await download(settings);
   if (asset) {
-    await unpack(asset, settings.project);
+    await unpack(settings, asset);
     await replacePlaceHolders(settings);
-    await npmInstall(settings.project);
-    await gitInit(settings.project);
+    // await npmInstall(settings);
+    await gitInit(settings);
     await cleanup(asset);
   }
 });
