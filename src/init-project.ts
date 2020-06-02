@@ -33,7 +33,7 @@ template(program.args[0] ?? '').then(async (settings: ProjectSettings) => {
   if (asset) {
     await unpack(settings, asset);
     await replacePlaceHolders(settings);
-    // await npmInstall(settings);
+    await npmInstall(settings);
     await gitInit(settings);
     await cleanup(asset);
   }
